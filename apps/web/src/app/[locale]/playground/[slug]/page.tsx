@@ -27,34 +27,35 @@ export default async function ExperimentPage({ params }: Props) {
       {/* Full-screen canvas — client-side only */}
       <ExperimentRenderer slug={slug} />
 
-      {/* Overlay: back + info */}
+      {/* Back button — standalone fixed element, no pointer-events-none parent */}
+      <Link
+        href={`/${locale}/playground`}
+        style={{ zIndex: 100, top: '76px', left: '24px' }}
+        className="fixed inline-flex items-center gap-1 rounded-lg border border-[var(--border)] bg-[var(--background)]/80 px-3 py-2 font-mono text-xs text-[var(--muted-foreground)] backdrop-blur-sm transition-colors hover:text-[var(--accent)]"
+      >
+        ← playground
+      </Link>
+
+      {/* Tags — top right, non-interactive */}
       <div
-        className="pointer-events-none absolute inset-0 flex flex-col justify-between px-6 pt-20 pb-6"
+        className="pointer-events-none fixed flex flex-wrap gap-1.5"
+        style={{ zIndex: 99, top: '76px', right: '24px' }}
+      >
+        {exp.tags.map((tag) => (
+          <span
+            key={tag}
+            className="rounded border border-[var(--border)] bg-[var(--background)]/80 px-1.5 py-0.5 font-mono text-[10px] text-[var(--muted-foreground)] backdrop-blur-sm"
+          >
+            {tag}
+          </span>
+        ))}
+      </div>
+
+      {/* Bottom info — non-interactive */}
+      <div
+        className="pointer-events-none fixed bottom-6 left-6"
         style={{ zIndex: 99 }}
       >
-        {/* Top bar */}
-        <div className="flex items-start justify-between">
-          <Link
-            href={`/${locale}/playground`}
-            className="pointer-events-auto inline-flex items-center gap-1 rounded-lg border border-[var(--border)] bg-[var(--background)]/80 px-3 py-2 font-mono text-xs text-[var(--muted-foreground)] backdrop-blur-sm transition-colors hover:text-[var(--accent)]"
-          >
-            ← playground
-          </Link>
-
-          {/* Tags */}
-          <div className="flex flex-wrap gap-1.5">
-            {exp.tags.map((tag) => (
-              <span
-                key={tag}
-                className="rounded border border-[var(--border)] bg-[var(--background)]/80 px-1.5 py-0.5 font-mono text-[10px] text-[var(--muted-foreground)] backdrop-blur-sm"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        {/* Bottom info */}
         <div className="max-w-sm rounded-xl border border-[var(--border)] bg-[var(--background)]/80 p-4 backdrop-blur-sm">
           <h1 className="mb-1 text-lg font-bold">{title}</h1>
           <p className="text-xs leading-relaxed text-[var(--muted-foreground)]">{description}</p>
