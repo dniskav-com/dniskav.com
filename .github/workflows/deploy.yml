@@ -25,7 +25,7 @@ jobs:
               curl -fsSL https://bun.sh/install | bash
             fi
             cd apps/web
-            bun install --frozen-lockfile
+            bun install
             rm -rf .next/cache
             bun run build
             systemctl restart dniskav

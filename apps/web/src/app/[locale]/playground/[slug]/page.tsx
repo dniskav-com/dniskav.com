@@ -1,11 +1,10 @@
 import { experiments } from '@/data/experiments'
 import { ExperimentRenderer } from '@/components/experiments/ExperimentRenderer'
-import { getLocale } from 'next-intl/server'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 interface Props {
-  params: Promise<{ slug: string }>
+  params: Promise<{ slug: string; locale: string }>
 }
 
 export async function generateStaticParams() {
@@ -13,8 +12,7 @@ export async function generateStaticParams() {
 }
 
 export default async function ExperimentPage({ params }: Props) {
-  const { slug } = await params
-  const locale = await getLocale()
+  const { slug, locale } = await params
   const exp = experiments.find((e) => e.slug === slug)
 
   if (!exp) notFound()
