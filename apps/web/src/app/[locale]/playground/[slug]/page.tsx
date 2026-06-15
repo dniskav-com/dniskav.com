@@ -28,7 +28,7 @@ export default async function ExperimentPage({ params }: Props) {
       <ExperimentRenderer slug={slug} />
 
       {/* Overlay: back + info */}
-      <div className="pointer-events-none absolute inset-0 z-[60] flex flex-col justify-between p-6">
+      <div className="pointer-events-none absolute inset-0 flex flex-col justify-between p-6" style={{ zIndex: 60 }}>
         {/* Top bar */}
         <div className="flex items-start justify-between">
           <Link
