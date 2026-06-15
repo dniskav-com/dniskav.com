@@ -7,9 +7,7 @@ interface Props {
   params: Promise<{ slug: string; locale: string }>
 }
 
-export async function generateStaticParams() {
-  return experiments.map((e) => ({ slug: e.slug }))
-}
+export const dynamic = 'force-dynamic'
 
 export default async function ExperimentPage({ params }: Props) {
   const { slug, locale } = await params
