@@ -18,8 +18,7 @@ jobs:
           script: |
             cd /root/var/www/app
             git fetch origin master
-            git checkout -- apps/web/bun.lock 2>/dev/null || rm -f apps/web/bun.lock
-            git pull origin master
+            git reset --hard origin/master
             export BUN_INSTALL="$HOME/.bun"
             export PATH="$BUN_INSTALL/bin:$PATH"
             if ! command -v bun &> /dev/null; then
@@ -27,5 +26,6 @@ jobs:
             fi
             cd apps/web
             bun install --frozen-lockfile
+            rm -rf .next/cache
             bun run build
             systemctl restart dniskav
