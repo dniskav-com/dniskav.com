@@ -28,7 +28,10 @@ export default async function ExperimentPage({ params }: Props) {
       <ExperimentRenderer slug={slug} />
 
       {/* Overlay: back + info */}
-      <div className="pointer-events-none absolute inset-0 flex flex-col justify-between p-6" style={{ zIndex: 60 }}>
+      <div
+        className="pointer-events-none absolute inset-0 flex flex-col justify-between px-6 pt-20 pb-6"
+        style={{ zIndex: 99 }}
+      >
         {/* Top bar */}
         <div className="flex items-start justify-between">
           <Link
@@ -52,7 +55,7 @@ export default async function ExperimentPage({ params }: Props) {
         </div>
 
         {/* Bottom info */}
-        <div className="rounded-xl border border-[var(--border)] bg-[var(--background)]/80 p-4 backdrop-blur-sm max-w-sm">
+        <div className="max-w-sm rounded-xl border border-[var(--border)] bg-[var(--background)]/80 p-4 backdrop-blur-sm">
           <h1 className="mb-1 text-lg font-bold">{title}</h1>
           <p className="text-xs leading-relaxed text-[var(--muted-foreground)]">{description}</p>
           <p className="mt-2 font-mono text-[10px] text-[var(--muted-foreground)]/50">
