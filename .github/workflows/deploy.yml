@@ -16,7 +16,7 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            cd /root/var/www/app
+            cd /srv/dniskav
             git fetch origin master
             git reset --hard origin/master
             export BUN_INSTALL="$HOME/.bun"
@@ -28,4 +28,6 @@ jobs:
             bun install
             rm -rf .next/cache
             bun run build
+            # El servicio corre como usuario dedicado: entregarle los artefactos
+            chown -R dniskav:dniskav /srv/dniskav
             systemctl restart dniskav
