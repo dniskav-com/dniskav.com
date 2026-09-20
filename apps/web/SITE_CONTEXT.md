@@ -41,14 +41,27 @@ Context document for AI assistants and future reference. Describes the full stac
 
 1. Push to `master` branch
 2. GitHub Actions connects via SSH to the VPS
-3. Runs `git pull`, `bun install --frozen-lockfile`, `bun run build`
-4. Restarts the `dniskav` systemd service
+3. `git fetch` + `git reset --hard origin/master` in `/srv/dniskav`
+4. `bun install` + `bun run build` in `apps/web`
+5. `chown -R dniskav:dniskav /srv/dniskav` (service runs as dedicated user)
+6. Restarts the `dniskav` systemd service
+
+The repo lives in **`/srv/dniskav`** (migrated out of `/root` on 2026-09-20).
+The service runs as system user `dniskav` with systemd sandboxing
+(`ProtectHome=true`, etc.). The `GEMINI_API_KEY` lives in `/etc/dniskav.env`
+(chmod 600) — never inline in the unit, never committed.
 
 ## AI Chat
 
 The floating chat widget (`AiChat.tsx`) connects to `/api/chat` (Next.js route).
 Uses **Gemini 2.5 Flash** with a system prompt defined in `src/lib/ai-context.ts`.
-Rate limiting is handled via Gemini's 429 responses with retry countdown in the UI.
+
+**Server-side limits [security, 2026-09-20 — do not remove]:**
+- Rate limit: 10 requests/min per IP (in-memory), returns 429 + `retryIn`
+- `message` ≤ 1000 chars; `history` ≤ 20 messages, each ≤ 4000 chars
+- Strict role validation (`user`/`model` only)
+
+The UI shows a cooldown countdown on 429 (both our limiter and Gemini's).
 
 ## Key Files
 

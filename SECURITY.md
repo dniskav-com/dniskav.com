@@ -1,21 +1,34 @@
 # Security Policy
 
-## Supported Versions
+## Scope
 
-Use this section to tell people about which versions of your project are
-currently being supported with security updates.
+This covers the self-hosted site **dniskav.com** (portfolio, Next.js 16
+self-hosted on Hetzner) and its public subdomains:
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 5.1.x   | :white_check_mark: |
-| 5.0.x   | :x:                |
-| 4.0.x   | :white_check_mark: |
-| < 4.0   | :x:                |
+- `www.dniskav.com` — portfolio (Next.js)
+- `fair-drop.dniskav.com` — fAir Drop file sharing app
+- `mcp-notes.dniskav.com` — personal MCP notes server (API-key auth)
 
 ## Reporting a Vulnerability
 
-Use this section to tell people how to report a vulnerability.
+Please report privately — do **not** open a public issue:
 
-Tell them where to go, how often they can expect to get an update on a
-reported vulnerability, what to expect if the vulnerability is accepted or
-declined, etc.
+- **Email:** dniskav@gmail.com
+- Or via [GitHub Security Advisories](https://github.com/dniskav/dniskav.com/security/advisories/new) (private)
+
+Expect an initial response within a few days. Security fixes are deployed
+automatically to production on push to `master`.
+
+## What's in place (as of 2026-09-20)
+
+- Dedicated system user + systemd sandboxing for the app service (no root)
+- HSTS, CSP, `X-Frame-Options`, `X-Content-Type-Options` on all subdomains
+- Server-side rate limiting and input limits on the AI chat endpoint
+- Dependabot + CodeQL in CI; dependencies audited (`npm audit` clean)
+- Firewall default-deny (UFW + Docker `DOCKER-USER` exception for published ports)
+- Secrets kept out of the repo (`.env*` gitignored, keys in `/etc/*.env` chmod 600)
+
+## Known non-issues
+
+- The AI chat exposes only a public portfolio context; no personal data is
+  retrievable through it. The system prompt lives in `src/lib/ai-context.ts`.
