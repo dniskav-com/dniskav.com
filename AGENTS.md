@@ -61,4 +61,6 @@ systemctl status dniskav | grep -E "dniskav|Main"                        # User=
 - **fAir-Drop** (pm2 `fairdrop`, puerto 3002) → `fair-drop.dniskav.com`
 - **notes-mcp** (Docker, puerto host 3001) → `mcp-notes.dniskav.com`
 - **Caddy** (Docker) — config en `/root/var/www/dniskav/Caddyfile`,
-  recargar con `docker exec caddy caddy reload --config /etc/caddy/Caddyfile`
+  recargar con `docker exec caddy caddy reload --config /etc/caddy/Caddyfile`.
+  La config está **versionada en `infra/caddy/` de este repo** (sin secretos);
+  tras cambiar el Caddyfile en el VPS, sincronizar la copia y commitear.

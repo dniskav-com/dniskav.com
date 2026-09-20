@@ -1,0 +1,47 @@
+{
+	acme_dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+}
+
+# Cabeceras de seguridad compartidas (HSTS + protecciones basicas)
+# Permissions-Policy se define por sitio (fair-drop necesita la camara)
+(security) {
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		-Server
+	}
+}
+
+dniskav.com {
+	redir https://www.dniskav.com{uri} permanent
+}
+
+# CSP especifica para el sitio principal (moderada: permite inline que
+# Next.js necesita para hidratar; igualmente bloquea objetos, iframes y formularios externos)
+(header) {
+	header {
+		Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'"
+	}
+}
+
+www.dniskav.com {
+	import security
+	import header
+	header Permissions-Policy "camera=(), microphone=(), geolocation=()"
+	reverse_proxy host.docker.internal:3000
+}
+
+mcp-notes.dniskav.com {
+	import security
+	header Permissions-Policy "camera=(), microphone=(), geolocation=()"
+	reverse_proxy host.docker.internal:3001
+}
+
+fair-drop.dniskav.com {
+	import security
+	# El escaner QR usa la camara: solo se permite al propio sitio (sin iframes de terceros)
+	header Permissions-Policy "camera=(self), microphone=(), geolocation=()"
+	reverse_proxy host.docker.internal:3002
+}
